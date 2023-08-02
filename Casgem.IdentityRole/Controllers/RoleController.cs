@@ -2,6 +2,7 @@
 using Casgem.IdentityRole.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Casgem.IdentityRole.Controllers
 {
@@ -33,7 +34,7 @@ namespace Casgem.IdentityRole.Controllers
         [HttpGet]
         public IActionResult AddRole()
         {
-            
+
             return View();
         }
 
@@ -51,6 +52,21 @@ namespace Casgem.IdentityRole.Controllers
             }
             ViewBag.error = "Hata: rol atanamadı!";
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteRole(int id)
+        {
+            var value = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id);
+            await _roleManager.DeleteAsync(value);
+            return RedirectToAction("RolesList");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateRole(int id)
+        {
+            var value = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id);
+            return View(value);
         }
     }
 }
