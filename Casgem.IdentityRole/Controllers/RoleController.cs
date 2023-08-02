@@ -83,5 +83,45 @@ namespace Casgem.IdentityRole.Controllers
             await _roleManager.UpdateAsync(value);
             return RedirectToAction("RolesList");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AssingRole(int id)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id);
+            TempData["userId"] = user.Id;
+            var roles = _roleManager.Roles.ToList();
+            var userRoles = await _userManager.GetRolesAsync(user);
+            List<RoleAssingViewModel> roleAssingViewModels = new List<RoleAssingViewModel>();
+            foreach (var role in roles)
+            {
+                RoleAssingViewModel model = new RoleAssingViewModel
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name,
+                    RoleExists = userRoles.Contains(role.Name)
+                };
+                roleAssingViewModels.Add(model);
+            }
+            return View(roleAssingViewModels);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssingRole(List<RoleAssingViewModel> models)
+        {
+            var userId = (int)TempData["userId"];
+            var user = _userManager.Users.FirstOrDefault(x => x.Id == userId);
+            foreach (var item in models)
+            {
+                if (item.RoleExists)
+                {
+                    await _userManager.AddToRoleAsync(user, item.RoleName);
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(user, item.RoleName);
+                }
+            }
+            return RedirectToAction("UsersList");
+        }
     }
 }
