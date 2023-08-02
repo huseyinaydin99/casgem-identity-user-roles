@@ -66,7 +66,22 @@ namespace Casgem.IdentityRole.Controllers
         public async Task<IActionResult> UpdateRole(int id)
         {
             var value = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id);
-            return View(value);
+            RoleUpdateViewModel model = new RoleUpdateViewModel
+            {
+                Id = value.Id,
+                Name = value.Name,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateRole(RoleUpdateViewModel model)
+        {
+            var value = _roleManager.Roles.FirstOrDefault(x => x.Id == model.Id);
+            value.Name = model.Name;
+            await _roleManager.UpdateAsync(value);
+            return RedirectToAction("RolesList");
         }
     }
 }
