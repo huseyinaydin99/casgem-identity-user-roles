@@ -1,0 +1,29 @@
+﻿@model Casgem.IdentityRole.Models.RegisterViewModel;
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container">
+    <h2>Kullanıcı Kayıt Sayfası</h2>
+    <form method="post">
+        <label>Ad Soyad</label>
+        <input type="text" asp-for="NameSurname" class="form-control" />
+        <br />
+        <label>Kullanıcı Adı</label>
+        <input type="text" asp-for="Username" class="form-control" />
+        <br />
+        <label>Email</label>
+        <input type="text" asp-for="Mail" class="form-control" />
+        <br />
+        <label>Şifre</label>
+        <input type="password" asp-for="Password" class="form-control" />
+        <br />
+        <button class="btn btn-primary">Kayıt Ol</button>
+    </form>
+</div>
